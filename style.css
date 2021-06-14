@@ -1,0 +1,40 @@
+/*
+Styles of the typing field and elements
+*/
+
+.font-size-zero-wrapper {
+    font-size: 0px;
+}
+
+.letter {
+    font-size: 18px;
+}
+
+.right {
+    background-color: green;
+}
+
+.mistake {
+    background-color: red;
+}
+
+.cursor {
+    border: 1px black solid;
+}
+
+/*
+Styles of the application
+*/
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10%;
+    /*border: black solid 1px;*/
+}
+
+.typing-field {
+    width: 100%;
+    padding: 5px;
+    background-color:ghostwhite;
+}
