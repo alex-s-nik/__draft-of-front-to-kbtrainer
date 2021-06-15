@@ -7,7 +7,7 @@ Styles of the typing field and elements
 }
 
 .letter {
-    font-size: 18px;
+    font-size: 22px;
 }
 
 .right {
@@ -37,4 +37,6 @@ Styles of the application
     width: 100%;
     padding: 5px;
     background-color:ghostwhite;
+    height: 100px;
+    overflow: auto;
 }
