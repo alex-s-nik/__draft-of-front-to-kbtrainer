@@ -57,6 +57,12 @@ window.addEventListener("keydown", (e) => {
             console.log('Space has been pressed.');
             e.preventDefault();
         }
+        // only for test, delete it later
+        /* if (e.key === '1') {
+            type_container.scrollTop = 400;
+        }
+        */
+        // end of: only for test, delete it later
         if (e.key === text[textPosition] || (e.key === "Enter" && text[textPosition] === "\n")) {
             letter.classList.remove('cursor');
             console.log(`textPosition ${textPosition} < text.length ${text.length}`);
@@ -65,6 +71,14 @@ window.addEventListener("keydown", (e) => {
                 // and it has right neighbour
                 const nextLetter = document.querySelector(`.letter[data-order='${textPosition + 1}']`);
                 nextLetter.classList.add('cursor');
+                console.log(`nextLetter.offsetTop = ${nextLetter.offsetTop}`);
+                console.log(`nextLetter.offsetHeight = ${nextLetter.offsetHeight}`);
+
+                // auto-scroll
+                // magic number 5 is type_container.padding-top and padding-bottom
+                type_container.scrollTop = Math.max(0, nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
+                // type_container.scrollTop = Math.min(type_container.scrollHeight - type_container.clientHeight / 2 - nextLetter.offsetHeight + 5,
+                // nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
             }
             letter.classList.add('right');
             console.log(textPosition);
@@ -92,3 +106,9 @@ window.addEventListener("keydown", (e) => {
 
 });
 
+type_container.addEventListener('scroll', function() {
+    // document.getElementById('showScroll').innerHTML = pageYOffset + 'px';
+    console.log(`type_container.scrollTop = ${type_container.scrollTop}`);
+    console.log(`type_container.scrollHeight = ${type_container.scrollHeight}`);
+    console.log(`type_container.clientHeight = ${type_container.clientHeight}`);
+  });
