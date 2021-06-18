@@ -76,7 +76,9 @@ window.addEventListener("keydown", (e) => {
 
                 // auto-scroll
                 // magic number 5 is type_container.padding-top and padding-bottom
-                type_container.scrollTop = Math.max(0, nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
+                type_container.scrollTop = Math.min(
+                    Math.max(0, nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5), 
+                    nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
                 // type_container.scrollTop = Math.min(type_container.scrollHeight - type_container.clientHeight / 2 - nextLetter.offsetHeight + 5,
                 // nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
             }
