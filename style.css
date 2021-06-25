@@ -75,16 +75,59 @@ Styles of the application
     margin-right: 10px;
 }
 
-
-
 .header__nav {
     background-color: lightblue;
 }
 
+.main__text-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: dimgray;
+    text-align: center;
+    padding: 5px 0;
+}
+
+.main__wrapper-typing {
+    display: flex;
+    flex-direction: row;
+}
+
+.main__stats {
+    width: 20%;
+    padding: 2px;
+    font-size: 24px;
+}
+
+.main__stats>div {
+    border-bottom: 1px solid powderblue;
+}
+
+.main__stats>div:last-child {
+    /*background-color: lightcoral;*/
+    border: none;
+}
+
+.main__timer, .main__speedfield, .main__mistakes {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 5px;
+}
+
+.main__timer-value, .main__speedfield-value, .main__mistakes-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: gray;
+}
+
 .typing-field {
-    width: 100%;
-    /*padding: 5px;*/
+    padding: 1%;
+    width: 98%;
     background-color:ghostwhite;
     height: 100px;
     overflow: auto;
+    height: auto;
 }
