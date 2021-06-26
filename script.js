@@ -9,6 +9,7 @@ Donec lectus sem, sodales consequat nunc id, bibendum pretium nisi. Morbi quis l
 Integer posuere at metus quis pretium. Suspendisse leo odio, dapibus non metus ac, mattis ornare nisl. Nunc ut turpis sit amet mi elementum laoreet. Curabitur maximus nunc in purus blandit consequat. Quisque mollis elit efficitur magna auctor, a rutrum sem pulvinar. Nunc id luctus.`;
 
 const textTitle = `This is title of the text (${text.length})`;
+const maximumTypingTime = 30 * 60 * 1000; // one half of hour in ms
 
 const textTitleField = document.querySelector('.main__text-title');
 const typeContainer = document.querySelector('.typing-field');
@@ -158,6 +159,7 @@ window.addEventListener('keydown', (e) => {
       if (textPosition === text.length) {
         // end of the exam
         // need to make check if minutes more than some big value, ex. 40
+        // make a function of the end of typing
         endTypingTime = Date.now();
         isTyping = false;
         timer.stop();
