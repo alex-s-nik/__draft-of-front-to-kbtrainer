@@ -8,16 +8,11 @@ Aenean ac egestas eros, sed scelerisque nisi. Nulla felis elit, convallis in era
 Donec lectus sem, sodales consequat nunc id, bibendum pretium nisi. Morbi quis lobortis nisl. Phasellus et neque non massa tempus tempor in id tellus. Morbi facilisis, ligula ac consectetur ullamcorper, turpis lacus cursus diam, sodales ultrices velit purus ac felis. Praesent convallis volutpat diam eget facilisis. Nunc eleifend est id sem congue, quis tempor ligula condimentum. Cras sed lectus nisl.
 Integer posuere at metus quis pretium. Suspendisse leo odio, dapibus non metus ac, mattis ornare nisl. Nunc ut turpis sit amet mi elementum laoreet. Curabitur maximus nunc in purus blandit consequat. Quisque mollis elit efficitur magna auctor, a rutrum sem pulvinar. Nunc id luctus.`;
 
+const typeContainer = document.querySelector('.typing-field');
+const brTag = document.createElement('br');
 
-const type_container = document.querySelector(".typing-field");
-//const type_wrapper = document.createElement("div");
-const type_wrapper = document.querySelector(".font-size-zero-wrapper");
-const brTag = document.createElement("br");
-//type_wrapper.className = "font-size-zero-wrapper";
-//type_container.append(type_wrapper);
-
-const timerField = document.querySelector(".timer");
-const typingSpeedField = document.querySelector(".cpm");
+const timerField = document.querySelector('.timer');
+const typingSpeedField = document.querySelector('.cpm');
 
 const timer = {
   interval: 1000,
@@ -54,8 +49,8 @@ formatTimeDifference = (startTime, endTime, withMs = false) => {
 
   const minutesTyping = deltaTime;
 
-  return `${minutesTyping}:${secondsTyping < 10 ? "0" : ""}${secondsTyping}${
-    withMs ? "." + millisecTyping : ""
+  return `${minutesTyping}:${secondsTyping < 10 ? '0' : ''}${secondsTyping}${
+    withMs ? '.' + millisecTyping : ''
   }`;
 };
 
@@ -67,30 +62,30 @@ let isTyping = false;
 
 makeTypingField = (text, container) => {
   for (let i = 0; i < text.length; i++) {
-    const letter = document.createElement("span");
-    letter.className = "letter";
+    const letter = document.createElement('span');
+    letter.className = 'letter';
     if (i === 0) {
-      letter.classList.add("cursor");
+      letter.classList.add('cursor');
     }
     letter.innerText = text[i];
     if (text[i] === String.fromCharCode(10)) {
-      console.log("code == 10");
+      console.log('code == 10');
       letter.innerText += String.fromCharCode(8629); // ensp - 8194; crarr
-      letter.innerHTML += "<br />";
+      letter.innerHTML += '<br />';
     }
-    letter.setAttribute("data-order", i);
+    letter.setAttribute('data-order', i);
     container.append(letter);
   }
 };
 
 charsPerMinute = (charsCount, typingTime) => {
-  return Math.floor(charsCount / typingTime * 1000 * 60);
+  return Math.floor((charsCount / typingTime) * 1000 * 60);
 };
 
-makeTypingField(text, type_wrapper);
+makeTypingField(text, typeContainer);
 
-window.addEventListener("keydown", (e) => {
-  if (e.key !== "Shift" && textPosition < text.length) {
+window.addEventListener('keydown', (e) => {
+  if (e.key !== 'Shift' && textPosition < text.length) {
     console.log(e.key);
     if (!isTyping) {
       isTyping = true;
@@ -101,21 +96,16 @@ window.addEventListener("keydown", (e) => {
     const letter = document.querySelector(
       `.letter[data-order='${textPosition}']`
     );
-    if (e.key === " ") {
-      console.log("Space has been pressed.");
+    if (e.key === ' ') {
+      console.log('Space has been pressed.');
       e.preventDefault();
     }
-    // only for test, delete it later
-    /* if (e.key === '1') {
-            type_container.scrollTop = 400;
-        }
-        */
-    // end of: only for test, delete it later
+
     if (
       e.key === text[textPosition] ||
-      (e.key === "Enter" && text[textPosition] === "\n")
+      (e.key === 'Enter' && text[textPosition] === '\n')
     ) {
-      letter.classList.remove("cursor");
+      letter.classList.remove('cursor');
       console.log(`textPosition ${textPosition} < text.length ${text.length}`);
       if (textPosition + 1 < text.length) {
         // the char isn't last
@@ -123,47 +113,33 @@ window.addEventListener("keydown", (e) => {
         const nextLetter = document.querySelector(
           `.letter[data-order='${textPosition + 1}']`
         );
-        nextLetter.classList.add("cursor");
-        console.log(`nextLetter.offsetTop = ${nextLetter.offsetTop}`);
-        console.log(`nextLetter.offsetHeight = ${nextLetter.offsetHeight}`);
+        nextLetter.classList.add('cursor');
 
-
-        console.log(`type_container.scrollTop = ${type_container.scrollTop}`);
-  console.log(`type_container.scrollHeight = ${type_container.scrollHeight}`);
-  console.log(`type_container.clientHeight = ${type_container.clientHeight}`);
-console.log("---------------------------------------");
-  console.log(`top: ${nextLetter.getBoundingClientRect().top}`);
-  console.log(`bottom: ${nextLetter.getBoundingClientRect().bottom}`);
-  console.log(`height: ${nextLetter.getBoundingClientRect().height}`);
-  console.log(`width: ${nextLetter.getBoundingClientRect().width}`);
-  console.log(`x: ${nextLetter.getBoundingClientRect().x}`);
-  console.log(`y: ${nextLetter.getBoundingClientRect().y}`);
-  console.log("---------------------------------------");
-  console.log(`typeContainer.top: ${type_container.getBoundingClientRect().top}`);
-  console.log("---------------------------------------");
-
-
-  tcTop = type_container.getBoundingClientRect().top;
         // auto-scroll
-        // magic number 5 is type_container.padding-top and padding-bottom
-        type_container.scrollTop = Math.min(
-          Math.max(
-            0,type_container.getBoundingClientRect().top -
-            nextLetter.offsetTop +
-              type_container.clientHeight / 2 -
-              nextLetter.offsetHeight / 2 +
-              5
-          ),
-          type_container.getBoundingClientRect().top -
-            nextLetter.offsetTop +
-              type_container.clientHeight / 2 -
-              nextLetter.offsetHeight / 2 +
-              5
+        const nextLetterTop = nextLetter.offsetTop;
+        const halfOfNextLetterHeight =
+          nextLetter.getBoundingClientRect().height / 2;
+        const typeContainerBoundingClientRect =
+          typeContainer.getBoundingClientRect();
+        const typeContainerTop = typeContainerBoundingClientRect.top;
+        const halfOftypeContainerHeight =
+          typeContainerBoundingClientRect.height / 2;
+
+        const typeContainerPadding = 7;
+
+        const offsetCursorForScroll =
+          nextLetterTop -
+          typeContainerTop -
+          halfOftypeContainerHeight +
+          halfOfNextLetterHeight +
+          typeContainerPadding;
+
+        typeContainer.scrollTop = Math.min(
+          Math.max(0, offsetCursorForScroll),
+          offsetCursorForScroll
         );
-        // type_container.scrollTop = Math.min(type_container.scrollHeight - type_container.clientHeight / 2 - nextLetter.offsetHeight + 5,
-        // nextLetter.offsetTop - type_container.clientHeight / 2 + nextLetter.offsetHeight / 2 - 5);
       }
-      letter.classList.add("right");
+      letter.classList.add('right');
       console.log(textPosition);
       textPosition++;
 
@@ -173,25 +149,25 @@ console.log("---------------------------------------");
         endTypingTime = Date.now();
         isTyping = false;
         timer.stop();
-        
+
         timerField.innerText = formatTimeDifference(
           startTypingTime,
           endTypingTime
         );
         typingSpeedField.innerHTML = charsPerMinute(
-            textPosition,
-            endTypingTime - startTypingTime
-          );
+          textPosition,
+          endTypingTime - startTypingTime
+        );
       }
     } else {
-      letter.classList.add("mistake");
+      letter.classList.add('mistake');
     }
   }
 });
 
-type_container.addEventListener("scroll", function () {
+typeContainer.addEventListener('scroll', function () {
   // document.getElementById('showScroll').innerHTML = pageYOffset + 'px';
-  console.log(`type_container.scrollTop = ${type_container.scrollTop}`);
-  console.log(`type_container.scrollHeight = ${type_container.scrollHeight}`);
-  console.log(`type_container.clientHeight = ${type_container.clientHeight}`);
+  console.log(`typeContainer.scrollTop = ${typeContainer.scrollTop}`);
+  console.log(`typeContainer.scrollHeight = ${typeContainer.scrollHeight}`);
+  console.log(`typeContainer.clientHeight = ${typeContainer.clientHeight}`);
 });
