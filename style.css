@@ -6,10 +6,6 @@
 Styles of the typing field and elements
 */
 
-.font-size-zero-wrapper {
-    font-size: 0px;
-}
-
 .letter {
     font-size: 22px;
 }
@@ -84,7 +80,7 @@ Styles of the application
     font-weight: bold;
     color: dimgray;
     text-align: center;
-    padding: 5px 0;
+    padding: 85px 0;
 }
 
 .main__wrapper-typing {
@@ -127,7 +123,7 @@ Styles of the application
     padding: 1%;
     width: 98%;
     background-color:ghostwhite;
-    height: 100px;
+    height: 320px;
     overflow: auto;
-    height: auto;
+    /*height: auto;*/
 }
