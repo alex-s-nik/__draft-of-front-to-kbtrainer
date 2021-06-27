@@ -9,7 +9,8 @@ Donec lectus sem, sodales consequat nunc id, bibendum pretium nisi. Morbi quis l
 Integer posuere at metus quis pretium. Suspendisse leo odio, dapibus non metus ac, mattis ornare nisl. Nunc ut turpis sit amet mi elementum laoreet. Curabitur maximus nunc in purus blandit consequat. Quisque mollis elit efficitur magna auctor, a rutrum sem pulvinar. Nunc id luctus.`;
 
 const textTitle = `This is title of the text (${text.length})`;
-const maximumTypingTime = 30 * 60 * 1000; // one half of hour in ms
+//const maximumTypingTime = 30 * 60 * 1000; // one half of hour in ms
+const maximumTypingTime = 10 * 1000; // ten seconds in ms for test
 
 const textTitleField = document.querySelector('.main__text-title');
 const typeContainer = document.querySelector('.typing-field');
@@ -34,14 +35,21 @@ const timer = {
   },
   step: () => {
     const dt = Date.now() - timer.expected;
-    //timer.counter++;
-    timer.htmlField.innerText = formatTimeDifference(0, ++timer.counter * 1000);
-    typingSpeedField.innerHTML = charsPerMinute(
-      textPosition,
-      Date.now() - startTypingTime
-    );
-    timer.expected += timer.interval;
-    timer.timeout = setTimeout(timer.step, Math.max(0, timer.interval - dt));
+    const timeOfTyping = Date.now() - startTypingTime;
+    if (timeOfTyping > maximumTypingTime) {
+      stopTyping();
+    } else {
+      timer.htmlField.innerText = formatTimeDifference(
+        0,
+        ++timer.counter * 1000
+      );
+      typingSpeedField.innerHTML = charsPerMinute(
+        textPosition,
+        Date.now() - startTypingTime
+      );
+      timer.expected += timer.interval;
+      timer.timeout = setTimeout(timer.step, Math.max(0, timer.interval - dt));
+    }
   },
 };
 
@@ -92,11 +100,22 @@ const charsPerMinute = (charsCount, typingTime) => {
   return Math.floor((charsCount / typingTime) * 1000 * 60);
 };
 
+const stopTyping = () => {
+  endTypingTime = Date.now();
+  isTyping = false;
+  timer.stop();
+  window.removeEventListener('keydown', keydownListener);
 
+  timerField.innerText = formatTimeDifference(startTypingTime, endTypingTime);
+  typingSpeedField.innerHTML = charsPerMinute(
+    textPosition,
+    endTypingTime - startTypingTime
+  );
+};
 
 makeTypingField(text, typeContainer);
 
-window.addEventListener('keydown', (e) => {
+const keydownListener = (e) => {
   if (e.key !== 'Shift' && textPosition < text.length) {
     console.log(e.key);
     if (!isTyping) {
@@ -156,29 +175,20 @@ window.addEventListener('keydown', (e) => {
         // end of autoscroll
       }
       letter.classList.add('right');
-      console.log(textPosition);
       textPosition++;
 
       if (textPosition === text.length) {
         // end of the exam
         // need to make check if minutes more than some big value, ex. 40
         // make a function of the end of typing
-        endTypingTime = Date.now();
-        isTyping = false;
-        timer.stop();
 
-        timerField.innerText = formatTimeDifference(
-          startTypingTime,
-          endTypingTime
-        );
-        typingSpeedField.innerHTML = charsPerMinute(
-          textPosition,
-          endTypingTime - startTypingTime
-        );
+        stopTyping();
       }
     } else {
       letter.classList.add('mistake');
       mistakesField.innerText = ++mistakes;
     }
   }
-});
+};
+
+window.addEventListener('keydown', keydownListener);
