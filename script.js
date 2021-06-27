@@ -45,7 +45,7 @@ const timer = {
   },
 };
 
-formatTimeDifference = (startTime, endTime, withMs = false) => {
+const formatTimeDifference = (startTime, endTime, withMs = false) => {
   let deltaTime = endTime - startTime;
   const millisecTyping = deltaTime % 1000;
   deltaTime = Math.floor(deltaTime / 1000);
@@ -66,7 +66,7 @@ let startTypingTime;
 let endTypingTime;
 let isTyping = false;
 
-makeTypingField = (text, container) => {
+const makeTypingField = (text, container) => {
   // ?? where it could be if not here
   textTitleField.innerText = textTitle;
 
@@ -77,8 +77,9 @@ makeTypingField = (text, container) => {
       letter.classList.add('cursor');
     }
     letter.innerText = text[i];
+
+    // replace unvisible symbol of carriage return by pretty arrow
     if (text[i] === String.fromCharCode(10)) {
-      console.log('code == 10');
       letter.innerText += String.fromCharCode(8629); // ensp - 8194; crarr
       letter.innerHTML += '<br />';
     }
@@ -87,9 +88,11 @@ makeTypingField = (text, container) => {
   }
 };
 
-charsPerMinute = (charsCount, typingTime) => {
+const charsPerMinute = (charsCount, typingTime) => {
   return Math.floor((charsCount / typingTime) * 1000 * 60);
 };
+
+
 
 makeTypingField(text, typeContainer);
 
@@ -178,11 +181,4 @@ window.addEventListener('keydown', (e) => {
       mistakesField.innerText = ++mistakes;
     }
   }
-});
-
-typeContainer.addEventListener('scroll', function () {
-  // document.getElementById('showScroll').innerHTML = pageYOffset + 'px';
-  console.log(`typeContainer.scrollTop = ${typeContainer.scrollTop}`);
-  console.log(`typeContainer.scrollHeight = ${typeContainer.scrollHeight}`);
-  console.log(`typeContainer.clientHeight = ${typeContainer.clientHeight}`);
 });
