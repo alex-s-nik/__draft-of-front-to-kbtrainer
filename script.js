@@ -9,8 +9,8 @@ Donec lectus sem, sodales consequat nunc id, bibendum pretium nisi. Morbi quis l
 Integer posuere at metus quis pretium. Suspendisse leo odio, dapibus non metus ac, mattis ornare nisl. Nunc ut turpis sit amet mi elementum laoreet. Curabitur maximus nunc in purus blandit consequat. Quisque mollis elit efficitur magna auctor, a rutrum sem pulvinar. Nunc id luctus.`;
 
 const textTitle = `This is title of the text (${text.length})`;
-//const maximumTypingTime = 30 * 60 * 1000; // one half of hour in ms
-const maximumTypingTime = 10 * 1000; // ten seconds in ms for test
+const maximumTypingTime = 30 * 60 * 1000; // one half of hour in ms
+//const maximumTypingTime = 10 * 1000; // ten seconds in ms for test
 
 const textTitleField = document.querySelector('.main__text-title');
 const typeContainer = document.querySelector('.typing-field');
@@ -67,13 +67,6 @@ const formatTimeDifference = (startTime, endTime, withMs = false) => {
   }`;
 };
 
-let textPosition = 0;
-let mistakes = 0;
-
-let startTypingTime;
-let endTypingTime;
-let isTyping = false;
-
 const makeTypingField = (text, container) => {
   // ?? where it could be if not here
   textTitleField.innerText = textTitle;
@@ -86,7 +79,7 @@ const makeTypingField = (text, container) => {
     }
     letter.innerText = text[i];
 
-    // replace unvisible symbol of carriage return by pretty arrow
+    // replace invisible symbol of carriage return by pretty arrow
     if (text[i] === String.fromCharCode(10)) {
       letter.innerText += String.fromCharCode(8629); // ensp - 8194; crarr
       letter.innerHTML += '<br />';
@@ -100,36 +93,40 @@ const charsPerMinute = (charsCount, typingTime) => {
   return Math.floor((charsCount / typingTime) * 1000 * 60);
 };
 
+const startTyping = () => {
+  isTyping = true;
+  startTypingTime = Date.now();
+  timer.start();
+}
+
 const stopTyping = () => {
   endTypingTime = Date.now();
   isTyping = false;
   timer.stop();
   window.removeEventListener('keydown', keydownListener);
 
+  showResults();
+};
+
+const showResults = () => {
   timerField.innerText = formatTimeDifference(startTypingTime, endTypingTime);
   typingSpeedField.innerHTML = charsPerMinute(
     textPosition,
     endTypingTime - startTypingTime
   );
-};
-
-makeTypingField(text, typeContainer);
+}
 
 const keydownListener = (e) => {
   if (e.key !== 'Shift' && textPosition < text.length) {
-    console.log(e.key);
     if (!isTyping) {
-      isTyping = true;
-      startTypingTime = Date.now();
-      timer.start();
-      console.log(timer);
+      startTyping();
     }
     const letter = document.querySelector(
       `.letter[data-order='${textPosition}']`
     );
 
     // the spacebar key initiate scroll event
-    // this condition need to prevent it
+    // this condition needed to prevent it
     if (e.key === ' ') {
       console.log('Space has been pressed.');
       e.preventDefault();
@@ -178,10 +175,6 @@ const keydownListener = (e) => {
       textPosition++;
 
       if (textPosition === text.length) {
-        // end of the exam
-        // need to make check if minutes more than some big value, ex. 40
-        // make a function of the end of typing
-
         stopTyping();
       }
     } else {
@@ -190,5 +183,14 @@ const keydownListener = (e) => {
     }
   }
 };
+
+
+let textPosition = 0;
+let mistakes = 0;
+
+let startTypingTime;
+let endTypingTime;
+let isTyping = false;
+makeTypingField(text, typeContainer);
 
 window.addEventListener('keydown', keydownListener);
